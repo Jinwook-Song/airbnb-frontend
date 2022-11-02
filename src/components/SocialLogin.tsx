@@ -17,7 +17,7 @@ function SocialLogin() {
         <Divider />
       </HStack>
       <HStack>
-        <Button leftIcon={<FaGithub />} w='full' colorScheme={'blackAlpha'}>
+        <Button leftIcon={<FaGithub />} w='full' colorScheme={'gray'}>
           Continue with Github
         </Button>
         <Button leftIcon={<FaComment />} w='full' colorScheme={'yellow'}>

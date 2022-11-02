@@ -23,7 +23,10 @@ interface LoginModalProps {
 function LoginModal({ isOpen, onClose }: LoginModalProps) {
   return (
     <Modal motionPreset='slideInBottom' onClose={onClose} isOpen={isOpen}>
-      <ModalOverlay />
+      <ModalOverlay
+        bg='blackAlpha.700'
+        backdropFilter='blur(2px) hue-rotate(90deg)'
+      />
       <ModalContent>
         <ModalHeader>Log in</ModalHeader>
         <ModalCloseButton />

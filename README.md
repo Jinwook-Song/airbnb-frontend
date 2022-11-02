@@ -269,3 +269,86 @@ export default Root;
   </ModalContent>
 </Modal>
 ```
+
+### Theme
+
+[docs](https://chakra-ui.com/docs/styled-system/customize-theme#customizing-theme-tokens)
+
+theme.ts → extends default theme
+
+```tsx
+import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
+
+const config: ThemeConfig = {
+  initialColorMode: 'system',
+  useSystemColorMode: false,
+};
+
+const theme = extendTheme({ config });
+
+export default theme;
+```
+
+index.tsx
+
+ColorModeScript를 통해 theme을 우선 결정
+
+```tsx
+import * as React from 'react';
+import * as ReactDOM from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import router from 'router';
+import theme from 'theme';
+
+const container = document.getElementById('root');
+if (!container) throw new Error('Failed to find the root element');
+const root = ReactDOM.createRoot(container);
+
+root.render(
+  <React.StrictMode>
+    <ChakraProvider theme={theme}>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <RouterProvider router={router} />
+    </ChakraProvider>
+  </React.StrictMode>
+);
+```
+
+### hooks
+
+useColorMode
+
+useColorModeValue
+
+```tsx
+const { toggleColorMode } = useColorMode();
+// useColorModeValue(Ligth, Dark)
+const logoColor = useColorModeValue('red.500', 'red.200');
+const Icon = useColorModeValue(FaMoon, FaSun);
+
+return (
+  <HStack justifyContent={'space-between'} px={10} py={5} borderBottomWidth={1}>
+    <Box color={logoColor}>
+      <FaAirbnb size={48} />
+    </Box>
+    <HStack spacing={2}>
+      <IconButton
+        onClick={toggleColorMode}
+        aria-label='toggle dark mode'
+        icon={<Icon />}
+        variant={'ghost'}
+      />
+      <Button onClick={onLoginOpen}>Log in</Button>
+      {/* Force color */}
+      <LightMode>
+        <Button onClick={onSignupOpen} colorScheme={'red'}>
+          Sign up
+        </Button>
+      </LightMode>
+    </HStack>
+    <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
+    <SignupModal isOpen={isSignupOpen} onClose={onSignupClose} />
+  </HStack>
+);
+```
