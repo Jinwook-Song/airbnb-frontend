@@ -218,3 +218,54 @@ function Root() {
 
 export default Root;
 ```
+
+### Modal
+
+```tsx
+<Modal motionPreset='slideInBottom' onClose={onClose} isOpen={isOpen}>
+  <ModalOverlay />
+  <ModalContent>
+    <ModalHeader>Log in</ModalHeader>
+    <ModalCloseButton />
+    <ModalBody>
+      <VStack>
+        <InputGroup>
+          <InputLeftAddon
+            bg={'gray.200'}
+            children={
+              <Box color={'gray.500'}>
+                <FaUserNinja />
+              </Box>
+            }
+          />
+          <Input
+            focusBorderColor={'none'}
+            variant={'outline'}
+            placeholder='Username'
+          />
+        </InputGroup>
+        <InputGroup>
+          <InputLeftAddon
+            bg={'gray.200'}
+            children={
+              <Box color={'gray.500'}>
+                <FaLock />
+              </Box>
+            }
+          />
+          <Input
+            focusBorderColor={'none'}
+            variant={'outline'}
+            placeholder='Password'
+          />
+        </InputGroup>
+      </VStack>
+    </ModalBody>
+    <ModalFooter>
+      <Button w={'100%'} colorScheme='red'>
+        Log in
+      </Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
