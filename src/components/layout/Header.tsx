@@ -1,9 +1,9 @@
 import {
   Box,
   Button,
-  HStack,
   IconButton,
   LightMode,
+  HStack,
   useColorMode,
   useColorModeValue,
   useDisclosure,
@@ -32,7 +32,10 @@ function Header() {
   return (
     <HStack
       justifyContent={'space-between'}
-      px={40}
+      px={{
+        base: 10,
+        lg: 40,
+      }}
       py={5}
       borderBottomWidth={1}
     >
