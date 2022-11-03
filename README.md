@@ -463,3 +463,21 @@ function Home() {
 
 export default Home;
 ```
+
+### Skeleton
+
+```tsx
+<Box>
+  <Skeleton
+    height={280}
+    rounded='2xl'
+    mb={6}
+    isLoaded={loaded}
+    fadeDuration={1}
+  >
+    <Room />
+  </Skeleton>
+  <SkeletonText noOfLines={2} spacing={3} isLoaded={loaded} mb={6} />
+  <SkeletonText noOfLines={1} isLoaded={loaded} />
+</Box>
+```
