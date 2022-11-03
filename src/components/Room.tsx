@@ -27,6 +27,9 @@ function Room() {
           right={5}
           top={5}
           color='white'
+          _hover={{
+            color: 'red',
+          }}
         >
           <FaRegHeart size={'25px'} />
         </Button>

@@ -481,3 +481,25 @@ export default Home;
   <SkeletonText noOfLines={1} isLoaded={loaded} />
 </Box>
 ```
+
+### **Pseudo** Selector
+
+[docs](https://chakra-ui.com/docs/styled-system/style-props#pseudo)
+
+\_hover, \_active …
+
+```tsx
+<Button
+  variant={'unstyled'}
+  position={'absolute'}
+  size='25px'
+  right={5}
+  top={5}
+  color='white'
+  _hover={{
+    color: 'red',
+  }}
+>
+  <FaRegHeart size={'25px'} />
+</Button>
+```
