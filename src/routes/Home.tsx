@@ -1,14 +1,41 @@
-import { Box, Grid, Skeleton, SkeletonText } from '@chakra-ui/react';
-import Room from 'components/Room';
+import { Grid } from '@chakra-ui/react';
+import Room from 'components/room';
+import RoomSkeleton from 'components/room/RoomSkeleton';
 import { useEffect, useState } from 'react';
 
+interface IPhoto {
+  pk: string;
+  file: string;
+  description: string;
+}
+
+interface IRoom {
+  pk: number;
+  name: string;
+  country: string;
+  city: string;
+  price: number;
+  rating: number;
+  is_owner: boolean;
+  photos: IPhoto[];
+}
+
 function Home() {
-  const [loaded, setLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [rooms, setRooms] = useState<IRoom[]>([]);
+
+  async function fetchRooms() {
+    const response = await fetch('http://127.0.0.1:8000/api/v1/rooms/');
+    const json = await response.json();
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    setRooms(json);
+    setIsLoading(false);
+  }
   useEffect(() => {
-    setTimeout(() => {
-      setLoaded(true);
-    }, 3000);
+    fetchRooms();
   }, []);
+
   return (
     <Grid
       mt={10}
@@ -26,22 +53,22 @@ function Home() {
         '2xl': 'repeat(5, 1fr)',
       }}
     >
-      {new Array(8).fill(0).map((_, idx) => (
-        <Room key={idx} />
-      ))}
-      <Box>
-        <Skeleton
-          height={280}
-          rounded='2xl'
-          mb={6}
-          isLoaded={loaded}
-          fadeDuration={1}
-        >
-          <Room />
-        </Skeleton>
-        <SkeletonText noOfLines={2} spacing={3} isLoaded={loaded} mb={6} />
-        <SkeletonText noOfLines={1} isLoaded={loaded} />
-      </Box>
+      {isLoading
+        ? new Array(10).fill(0).map((_, idx) => <RoomSkeleton key={idx} />)
+        : rooms.map((room, idx) => (
+            <Room
+              key={idx}
+              imageUrl={
+                room.photos[0]?.file ??
+                `https://source.unsplash.com/random/450x${450 + idx}`
+              }
+              name={room.name}
+              rating={room.rating}
+              city={room.city}
+              country={room.country}
+              price={room.price}
+            />
+          ))}
     </Grid>
   );
 }
