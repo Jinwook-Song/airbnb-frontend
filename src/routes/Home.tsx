@@ -3,6 +3,7 @@ import Room from 'components/room';
 import RoomSkeleton from 'components/room/RoomSkeleton';
 import { useQuery } from '@tanstack/react-query';
 import { getRooms } from 'util/api';
+import { Link } from 'react-router-dom';
 interface IPhoto {
   pk: string;
   file: string;
@@ -47,7 +48,7 @@ function Home() {
               key={idx}
               imageUrl={
                 room.photos[0]?.file ??
-                `https://source.unsplash.com/random/450x${450 + idx}`
+                `https://source.unsplash.com/random/800x${800 + idx}`
               }
               name={room.name}
               rating={room.rating}
