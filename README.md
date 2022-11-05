@@ -561,3 +561,30 @@ const axiosInstance = axios.create({
 export const getRooms = () =>
   axiosInstance.get('rooms/').then((response) => response.data);
 ```
+
+## with Variables
+
+RoomDetail.tsx
+
+```tsx
+const { data } = useQuery(['roomId:', roomPk], getRoom);
+```
+
+api.ts
+
+useQuery의 key를 받아서 사용할 수 있음
+
+```tsx
+import axios from 'axios';
+import { QueryFunctionContext } from '@tanstack/react-query';
+
+const axiosInstance = axios.create({
+  baseURL: 'http://127.0.0.1:8000/api/v1/',
+});
+
+export const getRooms = () =>
+  axiosInstance.get('rooms/').then((response) => response.data);
+
+export const getRoom = ({ queryKey }: QueryFunctionContext) =>
+  axiosInstance.get(`rooms/${queryKey[1]}`).then((response) => response.data);
+```

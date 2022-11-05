@@ -46,6 +46,7 @@ function Home() {
         : rooms?.map((room, idx) => (
             <Room
               key={idx}
+              pk={room.pk}
               imageUrl={
                 room.photos[0]?.file ??
                 `https://source.unsplash.com/random/800x${800 + idx}`
