@@ -659,3 +659,11 @@ function RoomDetail() {
 
 export default RoomDetail;
 ```
+
+### Avatar
+
+```tsx
+<Avatar name={data?.owner.username} size={'lg'} src={data?.owner.avatar}>
+  <AvatarBadge boxSize={'50%'} bg='green' />
+</Avatar>
+```

@@ -3,12 +3,17 @@ import { useQuery } from '@tanstack/react-query';
 import { getRoom } from 'util/api';
 import { IRoomDetail } from 'types';
 import {
+  Avatar,
+  AvatarBadge,
   Box,
   Grid,
   GridItem,
   Heading,
+  HStack,
   Image,
   Skeleton,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 
 function RoomDetail() {
@@ -18,6 +23,8 @@ function RoomDetail() {
     ['roomId:', roomPk],
     getRoom
   );
+
+  console.log(data);
 
   return (
     <Box
@@ -57,6 +64,29 @@ function RoomDetail() {
           </GridItem>
         ))}
       </Grid>
+      <HStack mt={10} justifyContent='space-between'>
+        <VStack>
+          <Heading fontSize={'xl'}>
+            House bosted by {data?.owner.username}
+          </Heading>
+          <HStack justifyContent={'flex-start'} w='full'>
+            <Text>
+              {data?.toilets} toilet{data?.toilets === 1 ? '' : 's'}
+            </Text>
+            <Text>•</Text>
+            <Text>
+              {data?.rooms} room{data?.toilets === 1 ? '' : 's'}
+            </Text>
+          </HStack>
+        </VStack>
+        <Avatar
+          name={data?.owner.username}
+          size={'lg'}
+          src={data?.owner.avatar}
+        >
+          <AvatarBadge boxSize={'50%'} bg='green' />
+        </Avatar>
+      </HStack>
     </Box>
   );
 }
