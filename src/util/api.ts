@@ -14,3 +14,10 @@ export const getRoom = async ({ queryKey }: QueryFunctionContext) => {
     .get(`rooms/${queryKey[1]}`)
     .then((response) => response.data);
 };
+
+export const getRoomreviews = async ({ queryKey }: QueryFunctionContext) => {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  return axiosInstance
+    .get(`rooms/${queryKey[1]}/reviews`)
+    .then((response) => response.data);
+};

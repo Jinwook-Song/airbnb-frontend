@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getRoom } from 'util/api';
-import { IRoomDetail } from 'types';
+import { getRoom, getRoomreviews } from 'util/api';
+import { IReview, IRoomDetail } from 'types';
 import {
   Avatar,
   AvatarBadge,
   Box,
+  Container,
   Grid,
   GridItem,
   Heading,
@@ -15,6 +16,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { FaStar } from 'react-icons/fa';
 
 function RoomDetail() {
   const { roomPk } = useParams();
@@ -24,7 +26,11 @@ function RoomDetail() {
     getRoom
   );
 
-  console.log(data);
+  const { data: reviewsData, isLoading: isReviewsLoading } = useQuery<
+    IReview[]
+  >(['rooms', roomPk, 'reviews'], getRoomreviews);
+
+  console.log(data, reviewsData);
 
   return (
     <Box
@@ -64,20 +70,24 @@ function RoomDetail() {
           </GridItem>
         ))}
       </Grid>
-      <HStack mt={10} justifyContent='space-between'>
-        <VStack>
-          <Heading fontSize={'xl'}>
-            House bosted by {data?.owner.username}
-          </Heading>
-          <HStack justifyContent={'flex-start'} w='full'>
-            <Text>
-              {data?.toilets} toilet{data?.toilets === 1 ? '' : 's'}
-            </Text>
-            <Text>•</Text>
-            <Text>
-              {data?.rooms} room{data?.toilets === 1 ? '' : 's'}
-            </Text>
-          </HStack>
+      <HStack mt={10} w='50%' justifyContent='space-between'>
+        <VStack alignItems={'flex-start'}>
+          <Skeleton isLoaded={!isLoading}>
+            <Heading fontSize={'xl'}>
+              House bosted by {data?.owner.username}
+            </Heading>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading}>
+            <HStack justifyContent={'flex-start'} w='full'>
+              <Text>
+                {data?.toilets} toilet{data?.toilets === 1 ? '' : 's'}
+              </Text>
+              <Text>•</Text>
+              <Text>
+                {data?.rooms} room{data?.toilets === 1 ? '' : 's'}
+              </Text>
+            </HStack>
+          </Skeleton>
         </VStack>
         <Avatar
           name={data?.owner.username}
@@ -87,6 +97,44 @@ function RoomDetail() {
           <AvatarBadge boxSize={'50%'} bg='green' />
         </Avatar>
       </HStack>
+      <Box my={10}>
+        <Skeleton isLoaded={!isReviewsLoading} w='50%'>
+          <Heading mb={5} fontSize={'2xl'}>
+            <HStack>
+              <FaStar />
+              <Text>{data?.rating}</Text>
+              <Text>•</Text>
+              <Text>
+                {reviewsData?.length} review
+                {reviewsData?.length === 1 ? '' : 's'}
+              </Text>
+            </HStack>
+          </Heading>
+        </Skeleton>
+        <Skeleton w='full' isLoaded={!isReviewsLoading}>
+          <Grid w='100%' templateColumns={'1fr 1fr'} gap='10'>
+            {reviewsData?.map((review, idx) => (
+              <VStack alignItems={'flex-start'} key={idx}>
+                <HStack>
+                  <Avatar
+                    name={review.user.username}
+                    src={review.user.avatar}
+                    size='md'
+                  />
+                  <VStack spacing={0} alignItems={'flex-start'}>
+                    <Heading fontSize={'md'}>{review.user.username}</Heading>
+                    <HStack spacing={1}>
+                      <FaStar size={'12px'} />
+                      <Text>{review.rating}</Text>
+                    </HStack>
+                  </VStack>
+                </HStack>
+                <Text>{review.payload}</Text>
+              </VStack>
+            ))}
+          </Grid>
+        </Skeleton>
+      </Box>
     </Box>
   );
 }
