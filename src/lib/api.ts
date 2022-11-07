@@ -21,3 +21,8 @@ export const getRoomreviews = async ({ queryKey }: QueryFunctionContext) => {
     .get(`rooms/${queryKey[1]}/reviews`)
     .then((response) => response.data);
 };
+
+export const getMe = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  return axiosInstance.get('users/me').then((response) => response.data);
+};

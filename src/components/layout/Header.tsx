@@ -7,13 +7,16 @@ import {
   useColorMode,
   useColorModeValue,
   useDisclosure,
+  Avatar,
 } from '@chakra-ui/react';
 import LoginModal from 'components/modal/LoginModal';
 import SignupModal from 'components/modal/SignupModal';
+import useUser from 'lib/hooks/useUser';
 import { FaAirbnb, FaMoon, FaSun } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 function Header() {
+  const { userLoading, isLoggedIn, user } = useUser();
   const {
     isOpen: isLoginOpen,
     onClose: onLoginClose,
@@ -52,13 +55,21 @@ function Header() {
           icon={<Icon />}
           variant={'ghost'}
         />
-        <Button onClick={onLoginOpen}>Log in</Button>
-        {/* Force color */}
-        <LightMode>
-          <Button onClick={onSignupOpen} colorScheme={'red'}>
-            Sign up
-          </Button>
-        </LightMode>
+        {!userLoading ? (
+          !isLoggedIn ? (
+            <>
+              <Button onClick={onLoginOpen}>Log in</Button>
+              {/* Force color */}
+              <LightMode>
+                <Button onClick={onSignupOpen} colorScheme={'red'}>
+                  Sign up
+                </Button>
+              </LightMode>
+            </>
+          ) : (
+            <Avatar size={'md'} />
+          )
+        ) : null}
       </HStack>
       <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
       <SignupModal isOpen={isSignupOpen} onClose={onSignupClose} />
