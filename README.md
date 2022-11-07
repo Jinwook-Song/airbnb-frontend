@@ -691,3 +691,29 @@ export default function useUser() {
   };
 }
 ```
+
+### Session authentication with Cookies
+
+- Server → Client
+  Log in → Django create session object (session db) → Django give cookie with session id to the user
+- Client → Server
+  Browser send the cookie automatically → Django can identify user with the session Id inside of cookie
+- Which cookies does the browser send to the server?
+  Browser knows which domain generated the cookie.
+- But javascript fetch have to send cookie manually
+  frontend > api.ts
+  ```tsx
+  const axiosInstance = axios.create({
+    baseURL: 'http://127.0.0.1:8000/api/v1/',
+    withCredentials: true, // API 요청시 쿠키를 보냄
+  });
+  ```
+  backend > config > setting.py
+  ```python
+  CORS_ALLOWED_ORIGINS = [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+  ]
+
+  CORS_ALLOW_CREDENTIALS = True
+  ```

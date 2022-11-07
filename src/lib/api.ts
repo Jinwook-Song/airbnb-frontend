@@ -3,6 +3,7 @@ import { QueryFunctionContext } from '@tanstack/react-query';
 
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/v1/',
+  withCredentials: true, // API 요청시 쿠키를 보냄
 });
 
 export const getRooms = () =>

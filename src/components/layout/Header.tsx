@@ -67,7 +67,7 @@ function Header() {
               </LightMode>
             </>
           ) : (
-            <Avatar size={'md'} />
+            <Avatar name={user?.username} src={user?.avatar} size={'md'} />
           )
         ) : null}
       </HStack>
