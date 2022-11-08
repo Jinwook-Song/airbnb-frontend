@@ -702,13 +702,16 @@ export default function useUser() {
   Browser knows which domain generated the cookie.
 - But javascript fetch have to send cookie manually
   frontend > api.ts
+
   ```tsx
   const axiosInstance = axios.create({
     baseURL: 'http://127.0.0.1:8000/api/v1/',
     withCredentials: true, // API 요청시 쿠키를 보냄
   });
   ```
+
   backend > config > setting.py
+
   ```python
   CORS_ALLOWED_ORIGINS = [
       "http://localhost:3000",
@@ -717,3 +720,41 @@ export default function useUser() {
 
   CORS_ALLOW_CREDENTIALS = True
   ```
+
+### Menu (ui)
+
+```tsx
+<Menu>
+  <MenuButton>
+    <Avatar name={user?.username} src={user?.avatar} size={'md'} />
+  </MenuButton>
+  <MenuList>
+    <MenuItem onClick={handleLogOut}>Log out</MenuItem>
+  </MenuList>
+</Menu>
+```
+
+### Toast
+
+```tsx
+const toast = useToast();
+
+async function handleLogOut() {
+  const toastId = toast({
+    title: 'Login out..',
+    description: 'Sad to see you go...',
+    status: 'loading',
+    position: 'bottom-right',
+    isClosable: true,
+  });
+  // const response = await logOut();
+  // console.log(response);
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  toast.update(toastId, {
+    title: 'Done!',
+    description: 'See you later!',
+    status: 'success',
+    duration: 1000,
+  });
+}
+```

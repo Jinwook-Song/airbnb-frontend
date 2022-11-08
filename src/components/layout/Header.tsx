@@ -8,9 +8,15 @@ import {
   useColorModeValue,
   useDisclosure,
   Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useToast,
 } from '@chakra-ui/react';
 import LoginModal from 'components/modal/LoginModal';
 import SignupModal from 'components/modal/SignupModal';
+import { logOut } from 'lib/api';
 import useUser from 'lib/hooks/useUser';
 import { FaAirbnb, FaMoon, FaSun } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -32,6 +38,26 @@ function Header() {
   // useColorModeValue(Ligth, Dark)
   const logoColor = useColorModeValue('red.500', 'red.200');
   const Icon = useColorModeValue(FaMoon, FaSun);
+  const toast = useToast();
+
+  async function handleLogOut() {
+    const toastId = toast({
+      title: 'Login out..',
+      description: 'Sad to see you go...',
+      status: 'loading',
+      position: 'bottom-right',
+      isClosable: true,
+    });
+    // const response = await logOut();
+    // console.log(response);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    toast.update(toastId, {
+      title: 'Done!',
+      description: 'See you later!',
+      status: 'success',
+      duration: 1000,
+    });
+  }
 
   return (
     <HStack
@@ -67,7 +93,14 @@ function Header() {
               </LightMode>
             </>
           ) : (
-            <Avatar name={user?.username} src={user?.avatar} size={'md'} />
+            <Menu>
+              <MenuButton>
+                <Avatar name={user?.username} src={user?.avatar} size={'md'} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={handleLogOut}>Log out</MenuItem>
+              </MenuList>
+            </Menu>
           )
         ) : null}
       </HStack>

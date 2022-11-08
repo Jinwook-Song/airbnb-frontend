@@ -27,3 +27,6 @@ export const getMe = async () => {
   await new Promise((resolve) => setTimeout(resolve, 3000));
   return axiosInstance.get('users/me').then((response) => response.data);
 };
+
+export const logOut = () =>
+  axiosInstance.post('users/log-out').then((response) => response.data);
