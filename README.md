@@ -758,3 +758,46 @@ async function handleLogOut() {
   });
 }
 ```
+
+### CSRF(Cross-site request forgery)
+
+- Django는 기본적으로 post 요청을 신뢰하지 않음
+- cors와 마찬가지로 허용해주어야 한다
+
+Backend > config > settings.py
+
+```python
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+```
+
+- front에서도 요청시 header에 csfr token이 있어야 한다
+
+Frontend > api.ts
+
+`npm i js-cookie`
+
+```tsx
+import Cookie from 'js-cookie';
+
+export const logOut = () =>
+  axiosInstance
+    .post('users/log-out', null, {
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken') || '',
+      },
+    })
+    .then((response) => response.data);
+```
+
+- Logout 이후, 상태를 업데이트 하기 위해 refetch
+
+```tsx
+import { useQueryClient } from '@tanstack/react-query';
+const queryClient = useQueryClient();
+
+await logOut();
+queryClient.refetchQueries(['me']);
+```

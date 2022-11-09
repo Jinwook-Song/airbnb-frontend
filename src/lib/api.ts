@@ -1,6 +1,6 @@
+import Cookie from 'js-cookie';
 import axios from 'axios';
 import { QueryFunctionContext } from '@tanstack/react-query';
-
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/v1/',
   withCredentials: true, // API 요청시 쿠키를 보냄
@@ -29,4 +29,10 @@ export const getMe = async () => {
 };
 
 export const logOut = () =>
-  axiosInstance.post('users/log-out').then((response) => response.data);
+  axiosInstance
+    .post('users/log-out', null, {
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken') || '',
+      },
+    })
+    .then((response) => response.data);

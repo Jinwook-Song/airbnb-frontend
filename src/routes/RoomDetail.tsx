@@ -6,7 +6,6 @@ import {
   Avatar,
   AvatarBadge,
   Box,
-  Container,
   Grid,
   GridItem,
   Heading,
