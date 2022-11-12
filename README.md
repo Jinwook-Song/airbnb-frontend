@@ -801,3 +801,12 @@ const queryClient = useQueryClient();
 await logOut();
 queryClient.refetchQueries(['me']);
 ```
+
+## OAuth (github, kakao, …)
+
+Basic Flow
+
+1. user → github
+2. if permission confirm ? github → redirect with token (127.0.0.1:3000/confirm-gh?token=123asd)
+3. send token to backend(django)
+4. backend can use github-api with that token
