@@ -10,9 +10,11 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Text,
   VStack,
 } from '@chakra-ui/react';
 import SocialLogin from 'components/SocialLogin';
+import { useForm } from 'react-hook-form';
 import { FaLock, FaUserNinja } from 'react-icons/fa';
 
 interface LoginModalProps {
@@ -20,7 +22,22 @@ interface LoginModalProps {
   onClose: () => void;
 }
 
+interface IForm {
+  username: string;
+  password: string;
+}
+
 function LoginModal({ isOpen, onClose }: LoginModalProps) {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<IForm>();
+
+  function onValid() {
+    console.log(getValues());
+  }
   return (
     <Modal motionPreset='slideInBottom' onClose={onClose} isOpen={isOpen}>
       <ModalOverlay
@@ -30,7 +47,7 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
       <ModalContent>
         <ModalHeader>Log in</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody as={'form'} onSubmit={handleSubmit(onValid)}>
           <VStack>
             <InputGroup>
               <InputLeftAddon
@@ -42,6 +59,10 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 }
               />
               <Input
+                {...register('username', {
+                  required: 'Username is required',
+                })}
+                isInvalid={Boolean(errors.username?.message)}
                 focusBorderColor={'none'}
                 variant={'outline'}
                 placeholder='Username'
@@ -57,13 +78,17 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 }
               />
               <Input
+                {...register('password', {
+                  required: 'Password is required',
+                })}
+                isInvalid={Boolean(errors.password?.message)}
                 focusBorderColor={'none'}
                 variant={'outline'}
                 placeholder='Password'
               />
             </InputGroup>
           </VStack>
-          <Button mt={4} w='full' colorScheme='red'>
+          <Button type='submit' mt={4} w='full' colorScheme='red'>
             Log in
           </Button>
           <SocialLogin />
