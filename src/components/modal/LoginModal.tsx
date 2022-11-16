@@ -11,9 +11,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SocialLogin from 'components/SocialLogin';
+import { LoginFormProps, manualLogin } from 'lib/api';
 import { useForm } from 'react-hook-form';
 import { FaLock, FaUserNinja } from 'react-icons/fa';
 
@@ -22,21 +25,40 @@ interface LoginModalProps {
   onClose: () => void;
 }
 
-interface IForm {
-  username: string;
-  password: string;
-}
-
 function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm<IForm>();
+    reset,
+  } = useForm<LoginFormProps>();
+
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const mutation = useMutation(manualLogin, {
+    onMutate: () => {
+      console.log('mutation starting');
+    },
+    onSuccess: (data) => {
+      console.log('✅', data);
+      toast({
+        status: 'success',
+        title: 'Welcome!',
+        position: 'bottom-right',
+        description: 'Happy to have you back!',
+      });
+      onClose();
+      reset();
+      queryClient.refetchQueries(['me']);
+    },
+    onError: (error) => {
+      console.log('mutation has an error');
+    },
+  });
 
   function onValid() {
-    console.log(getValues());
+    mutation.mutate({ ...getValues() });
   }
   return (
     <Modal motionPreset='slideInBottom' onClose={onClose} isOpen={isOpen}>
@@ -81,6 +103,7 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 {...register('password', {
                   required: 'Password is required',
                 })}
+                type='password'
                 isInvalid={Boolean(errors.password?.message)}
                 focusBorderColor={'none'}
                 variant={'outline'}
@@ -88,7 +111,18 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
               />
             </InputGroup>
           </VStack>
-          <Button type='submit' mt={4} w='full' colorScheme='red'>
+          {mutation.isError ? (
+            <Text color={'red'} fontSize='sm'>
+              Username or Password is wrong
+            </Text>
+          ) : null}
+          <Button
+            isLoading={mutation.isLoading}
+            type='submit'
+            mt={4}
+            w='full'
+            colorScheme='red'
+          >
             Log in
           </Button>
           <SocialLogin />

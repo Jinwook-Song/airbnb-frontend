@@ -955,3 +955,67 @@ function SocialLogin() {
 
 export default SocialLogin;
 ```
+
+### useMutation
+
+[docs](https://tanstack.com/query/v4/docs/reference/useMutation)
+
+api.ts
+
+```tsx
+export interface LoginFormProps {
+  username: string;
+  password: string;
+}
+
+export interface LoginSuccessResponse {
+  ok: string;
+}
+export interface LoginFailResponse {
+  error: string;
+}
+
+export const manualLogin = ({ username, password }: LoginFormProps) =>
+  axiosInstance
+    .post(
+      `/users/log-in`,
+      { username, password },
+      {
+        headers: {
+          'X-CSRFToken': Cookie.get('csrftoken') || '',
+        },
+      }
+    )
+    .then((response) => response.status);
+```
+
+login.tsx
+
+useMutation은 success, fail, props 의 세 타입을 받는다
+
+```tsx
+const toast = useToast();
+  const queryClient = useQueryClient();
+  const mutation = useMutation(manualLogin, {
+    onMutate: () => {
+      console.log('mutation starting');
+    },
+    onSuccess: (data) => {
+      console.log('✅', data);
+      toast({
+        status: 'success',
+        title: 'Welcome!',
+        position: 'bottom-right',
+        description: 'Happy to have you back!',
+      });
+      onClose();
+      queryClient.refetchQueries(['me']);
+    },
+    onError: (error) => {
+      console.log('mutation has an error');
+    },
+  });
+
+  function onValid() {
+    mutation.mutate({ ...getValues() });
+```
