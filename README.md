@@ -8,6 +8,12 @@
 
 ---
 
+### Authentication (TODOS)
+
+- [ ] Sign up
+- [ ] Refactor Kakao Login
+- [ ] Refactor Github Login
+
 ## React-Router-Dom
 
 ### Basic
