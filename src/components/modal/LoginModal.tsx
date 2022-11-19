@@ -4,6 +4,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  LightMode,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -116,15 +117,17 @@ function LoginModal({ isOpen, onClose }: LoginModalProps) {
               Username or Password is wrong
             </Text>
           ) : null}
-          <Button
-            isLoading={mutation.isLoading}
-            type='submit'
-            mt={4}
-            w='full'
-            colorScheme='red'
-          >
-            Log in
-          </Button>
+          <LightMode>
+            <Button
+              isLoading={mutation.isLoading}
+              type='submit'
+              mt={4}
+              w='full'
+              colorScheme='red'
+            >
+              Log in
+            </Button>
+          </LightMode>
           <SocialLogin />
         </ModalBody>
       </ModalContent>

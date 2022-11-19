@@ -11,6 +11,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  LightMode,
   Select,
   Skeleton,
   Textarea,
@@ -132,9 +133,11 @@ function UploadRoom() {
                 </Grid>
               </Skeleton>
             </FormControl>
-            <Button colorScheme={'red'} size={'lg'} w='full'>
-              Upload Room
-            </Button>
+            <LightMode>
+              <Button colorScheme={'red'} size={'lg'} w='full'>
+                Upload Room
+              </Button>
+            </LightMode>
           </VStack>
         </Container>
       </Box>

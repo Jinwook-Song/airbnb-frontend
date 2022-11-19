@@ -1,4 +1,11 @@
-import { Box, Button, Divider, HStack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Divider,
+  HStack,
+  LightMode,
+  Text,
+} from '@chakra-ui/react';
 import { FaComment, FaGithub } from 'react-icons/fa';
 
 function SocialLogin() {
@@ -38,15 +45,17 @@ function SocialLogin() {
         >
           Continue with Github
         </Button>
-        <Button
-          as={'a'}
-          href={`https://kauth.kakao.com/oauth/authorize?${kakaoParamsURL}`}
-          leftIcon={<FaComment />}
-          w='full'
-          colorScheme={'yellow'}
-        >
-          Continue with Kakao
-        </Button>
+        <LightMode>
+          <Button
+            as={'a'}
+            href={`https://kauth.kakao.com/oauth/authorize?${kakaoParamsURL}`}
+            leftIcon={<FaComment />}
+            w='full'
+            colorScheme={'yellow'}
+          >
+            Continue with Kakao
+          </Button>
+        </LightMode>
       </HStack>
     </Box>
   );

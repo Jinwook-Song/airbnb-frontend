@@ -4,6 +4,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  LightMode,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -93,9 +94,11 @@ function SignupModal({ isOpen, onClose }: LoginModalProps) {
               />
             </InputGroup>
           </VStack>
-          <Button mt={4} w='full' colorScheme='red'>
-            Sign up
-          </Button>
+          <LightMode>
+            <Button mt={4} w='full' colorScheme='red'>
+              Sign up
+            </Button>
+          </LightMode>
           <SocialLogin />
         </ModalBody>
       </ModalContent>
