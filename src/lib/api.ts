@@ -21,9 +21,8 @@ export const getRoomreviews = async ({ queryKey }: QueryFunctionContext) => {
     .then((response) => response.data);
 };
 
-export const getMe = async () => {
-  return axiosInstance.get('users/me').then((response) => response.data);
-};
+export const getMe = async () =>
+  axiosInstance.get('users/me').then((response) => response.data);
 
 export const logOut = () =>
   axiosInstance
@@ -77,3 +76,9 @@ export const manualLogin = ({ username, password }: LoginFormProps) =>
       }
     )
     .then((response) => response.status);
+
+export const getAmenities = () =>
+  axiosInstance.get('rooms/amenities/').then((response) => response.data);
+
+export const getCategories = () =>
+  axiosInstance.get('categories').then((response) => response.data);
