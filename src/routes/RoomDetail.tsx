@@ -59,12 +59,14 @@ function RoomDetail() {
             key={idx}
           >
             <Skeleton isLoaded={!isLoading} w='100%' h='100%'>
-              <Image
-                src={data?.photos[idx].file}
-                w='100%'
-                h='100%'
-                objectFit={'cover'}
-              />
+              {data?.photos && data.photos.length ? (
+                <Image
+                  src={data?.photos[idx].file}
+                  w='100%'
+                  h='100%'
+                  objectFit={'cover'}
+                />
+              ) : null}
             </Skeleton>
           </GridItem>
         ))}
@@ -73,7 +75,7 @@ function RoomDetail() {
         <VStack alignItems={'flex-start'}>
           <Skeleton isLoaded={!isLoading}>
             <Heading fontSize={'xl'}>
-              House bosted by {data?.owner.username}
+              House hosted by {data?.owner.username}
             </Heading>
           </Skeleton>
           <Skeleton isLoaded={!isLoading}>
