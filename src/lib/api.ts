@@ -1,6 +1,8 @@
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import { QueryFunctionContext } from '@tanstack/react-query';
+import { LoginFormProps } from 'components/modal/LoginModal';
+import { UploadRoomFormProps } from 'routes/UploadRoom';
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/v1/',
   withCredentials: true, // API 요청시 쿠키를 보냄
@@ -36,7 +38,7 @@ export const logOut = () =>
 export const githubLogIn = (code: string) =>
   axiosInstance
     .post(
-      `/users/github`,
+      `users/github`,
       { code },
       {
         headers: {
@@ -49,7 +51,7 @@ export const githubLogIn = (code: string) =>
 export const kakaoLogin = (code: string) =>
   axiosInstance
     .post(
-      `/users/kakao`,
+      `users/kakao`,
       { code },
       {
         headers: {
@@ -59,15 +61,10 @@ export const kakaoLogin = (code: string) =>
     )
     .then((response) => response.status);
 
-export interface LoginFormProps {
-  username: string;
-  password: string;
-}
-
 export const manualLogin = ({ username, password }: LoginFormProps) =>
   axiosInstance
     .post(
-      `/users/log-in`,
+      `users/log-in`,
       { username, password },
       {
         headers: {
@@ -82,3 +79,12 @@ export const getAmenities = () =>
 
 export const getCategories = () =>
   axiosInstance.get('categories').then((response) => response.data);
+
+export const uploadRoom = (roomInfo: UploadRoomFormProps) =>
+  axiosInstance
+    .post(`rooms/`, roomInfo, {
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken') || '',
+      },
+    })
+    .then((response) => response.status);

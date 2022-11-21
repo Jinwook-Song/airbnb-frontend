@@ -17,13 +17,18 @@ import {
 } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SocialLogin from 'components/SocialLogin';
-import { LoginFormProps, manualLogin } from 'lib/api';
+import { manualLogin } from 'lib/api';
 import { useForm } from 'react-hook-form';
 import { FaLock, FaUserNinja } from 'react-icons/fa';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
+}
+
+export interface LoginFormProps {
+  username: string;
+  password: string;
 }
 
 function LoginModal({ isOpen, onClose }: LoginModalProps) {
