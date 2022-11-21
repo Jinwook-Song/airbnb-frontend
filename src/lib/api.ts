@@ -87,4 +87,4 @@ export const uploadRoom = (roomInfo: UploadRoomFormProps) =>
         'X-CSRFToken': Cookie.get('csrftoken') || '',
       },
     })
-    .then((response) => response.status);
+    .then((response) => response.data);

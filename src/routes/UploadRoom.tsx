@@ -26,7 +26,7 @@ import useHostOnly from 'lib/hooks/useHostOnly';
 import { useForm } from 'react-hook-form';
 import { FaBed, FaDollarSign, FaToilet } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { IAmenity, ICategory } from 'types';
+import { IAmenity, ICategory, IRoomDetail } from 'types';
 
 export interface UploadRoomFormProps {
   name: string;
@@ -57,14 +57,13 @@ function UploadRoom() {
   });
 
   const mutation = useMutation(uploadRoom, {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: (data: IRoomDetail) => {
       toast({
         status: 'success',
         title: 'Room created',
         position: 'bottom-right',
       });
-      navigate('/', { replace: true });
+      navigate(`/rooms/${data.id}`, { replace: true });
     },
   });
 
