@@ -40,6 +40,7 @@ function Home() {
               city={room.city}
               country={room.country}
               price={room.price}
+              is_owner={room.is_owner}
             />
           ))}
     </Grid>

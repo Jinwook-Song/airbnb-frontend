@@ -1025,3 +1025,79 @@ const toast = useToast();
   function onValid() {
     mutation.mutate({ ...getValues() });
 ```
+
+### Protected Page (component or hook)
+
+- component
+
+```tsx
+import useUser from 'lib/hooks/useUser';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+interface IProtectedPageProps {
+  children: React.ReactNode;
+}
+
+function ProtectedPage({ children }: IProtectedPageProps) {
+  const { isLoggedIn, userLoading } = useUser();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userLoading) {
+      if (!isLoggedIn) {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [navigate, userLoading, isLoggedIn]);
+  return <>{children}</>;
+}
+
+export default ProtectedPage;
+```
+
+- hook
+
+```tsx
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useUser from './useUser';
+
+function useHostOnly() {
+  const { user, userLoading } = useUser();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!userLoading) {
+      if (!user?.is_host) {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [navigate, userLoading, user]);
+  return;
+}
+
+export default useHostOnly;
+```
+
+- usage
+
+```tsx
+import ProtectedPage from 'components/middleware/ProtectedPage';
+import useHostOnly from 'lib/hooks/useHostOnly';
+
+function UploadRoom() {
+  useHostOnly();
+  return <ProtectedPage>UploadRoom</ProtectedPage>;
+}
+
+export default UploadRoom;
+```
+
+## CloudFlare
+
+Front → Backend → Storage (like AWS) X
+
+Front request URL to backend
+
+Bakcend give empty URL from CF
+
+Front directly upload image on the URL
