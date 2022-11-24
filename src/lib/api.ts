@@ -88,3 +88,12 @@ export const uploadRoom = (roomInfo: UploadRoomFormProps) =>
       },
     })
     .then((response) => response.data);
+
+export const getUploadURL = () =>
+  axiosInstance
+    .post('medias/photos/get-url', null, {
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken') || '',
+      },
+    })
+    .then((response) => response.data);
