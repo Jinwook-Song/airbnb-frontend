@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import ProtectedPage from 'components/middleware/ProtectedPage';
-import { getUploadURL } from 'lib/api';
+import { getUploadURL, uploadImage } from 'lib/api';
 import useHostOnly from 'lib/hooks/useHostOnly';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -25,19 +25,30 @@ interface IForm {
   photo: FileList;
 }
 
+interface IUploadURLResponse {
+  id: string;
+  uploadURL: string;
+}
+
 export default function UploadPhotos() {
   useHostOnly();
+  const { roomPk } = useParams();
   const { register, handleSubmit, getValues, watch, reset } = useForm<IForm>();
-  const mutation = useMutation(getUploadURL, {
+  const uploadImageMutaion = useMutation(uploadImage, {
     onSuccess: (data: any) => {
       console.log('✅', data);
     },
   });
-  const { roomPk } = useParams();
+  const uploadURLMuation = useMutation<IUploadURLResponse>(getUploadURL, {
+    onSuccess: ({ id, uploadURL }) => {
+      console.log('✅', id);
+      uploadImageMutaion.mutate({ file: getValues('photo'), uploadURL });
+    },
+  });
 
   const onValid = () => {
     console.log(getValues());
-    mutation.mutate();
+    uploadURLMuation.mutate();
   };
 
   const photo = watch('photo');
@@ -50,8 +61,6 @@ export default function UploadPhotos() {
       setPhotoPreview('');
     }
   }, [photo]);
-
-  console.log(photo);
 
   return (
     <ProtectedPage>

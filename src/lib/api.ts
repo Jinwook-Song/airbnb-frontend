@@ -3,6 +3,7 @@ import axios from 'axios';
 import { QueryFunctionContext } from '@tanstack/react-query';
 import { LoginFormProps } from 'components/modal/LoginModal';
 import { UploadRoomFormProps } from 'routes/UploadRoom';
+
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/v1/',
   withCredentials: true, // API 요청시 쿠키를 보냄
@@ -97,3 +98,20 @@ export const getUploadURL = () =>
       },
     })
     .then((response) => response.data);
+
+export interface IUploadImageVariables {
+  file: FileList;
+  uploadURL: string;
+}
+
+export const uploadImage = ({ file, uploadURL }: IUploadImageVariables) => {
+  const form = new FormData();
+  form.append('file', file[0]);
+  return axios
+    .post(uploadURL, form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((response) => response.data);
+};
