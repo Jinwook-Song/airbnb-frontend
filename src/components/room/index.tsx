@@ -43,7 +43,7 @@ function Room({
     <Link to={`/rooms/${pk}`}>
       <VStack alignItems={'flex-start'}>
         <Box position='relative' overflow={'hidden'} mb={3} rounded='2xl'>
-          <Image minH='280' src={imageUrl} />
+          <Image minH='280' src={imageUrl} objectFit='cover' />
           <Button
             variant={'unstyled'}
             position='absolute'

@@ -10,11 +10,12 @@ import {
   Image,
   Input,
   LightMode,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import ProtectedPage from 'components/middleware/ProtectedPage';
-import { getUploadURL, uploadImage } from 'lib/api';
+import { createPhoto, getUploadURL, uploadImage } from 'lib/api';
 import useHostOnly from 'lib/hooks/useHostOnly';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -32,16 +33,30 @@ interface IUploadURLResponse {
 
 export default function UploadPhotos() {
   useHostOnly();
+  const toast = useToast();
   const { roomPk } = useParams();
   const { register, handleSubmit, getValues, watch, reset } = useForm<IForm>();
+  const createPhotoMutation = useMutation(createPhoto, {
+    onSuccess: () => {
+      reset();
+      toast({
+        status: 'success',
+        title: 'Uploaded!',
+        position: 'bottom-right',
+      });
+    },
+  });
   const uploadImageMutaion = useMutation(uploadImage, {
-    onSuccess: (data: any) => {
-      console.log('✅', data);
+    onSuccess: ({ result }) => {
+      createPhotoMutation.mutate({
+        roomPk: roomPk!,
+        description: result.filename,
+        file: result.variants[0],
+      });
     },
   });
   const uploadURLMuation = useMutation<IUploadURLResponse>(getUploadURL, {
     onSuccess: ({ id, uploadURL }) => {
-      console.log('✅', id);
       uploadImageMutaion.mutate({ file: getValues('photo'), uploadURL });
     },
   });
@@ -91,7 +106,16 @@ export default function UploadPhotos() {
                   >
                     <Image w='full' src={photoPreview} objectFit='cover' />
                   </AspectRatio>
-                  <Button w='full' colorScheme={'gray'} onClick={() => reset()}>
+                  <Button
+                    disabled={
+                      uploadURLMuation.isLoading ||
+                      uploadImageMutaion.isLoading ||
+                      createPhotoMutation.isLoading
+                    }
+                    w='full'
+                    colorScheme={'gray'}
+                    onClick={() => reset()}
+                  >
                     Cancel
                   </Button>
                 </VStack>
@@ -127,7 +151,18 @@ export default function UploadPhotos() {
             </FormControl>
             <LightMode>
               <Button
-                disabled={!photo || photo?.length < 1}
+                isLoading={
+                  uploadURLMuation.isLoading ||
+                  uploadImageMutaion.isLoading ||
+                  createPhotoMutation.isLoading
+                }
+                disabled={
+                  !photo ||
+                  photo?.length < 1 ||
+                  uploadURLMuation.isLoading ||
+                  uploadImageMutaion.isLoading ||
+                  createPhotoMutation.isLoading
+                }
                 type='submit'
                 w='full'
                 colorScheme={'red'}

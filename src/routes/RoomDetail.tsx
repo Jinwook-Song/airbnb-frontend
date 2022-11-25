@@ -61,7 +61,10 @@ function RoomDetail() {
             <Skeleton isLoaded={!isLoading} w='100%' h='100%'>
               {data?.photos && data.photos.length ? (
                 <Image
-                  src={data?.photos[idx].file}
+                  src={
+                    data?.photos[idx]?.file ??
+                    `https://source.unsplash.com/random/400x${400 + idx}`
+                  }
                   w='100%'
                   h='100%'
                   objectFit={'cover'}

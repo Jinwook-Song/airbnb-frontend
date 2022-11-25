@@ -99,19 +99,55 @@ export const getUploadURL = () =>
     })
     .then((response) => response.data);
 
-export interface IUploadImageVariables {
+interface IUploadImageVariables {
   file: FileList;
   uploadURL: string;
 }
 
-export const uploadImage = ({ file, uploadURL }: IUploadImageVariables) => {
+interface IUploadImageResponse {
+  result: {
+    filename: string;
+    id: string;
+    requireSignedURLs: boolean;
+    uploaded: Date;
+    variants: string[];
+  };
+}
+
+export const uploadImage = async ({
+  file,
+  uploadURL,
+}: IUploadImageVariables): Promise<IUploadImageResponse> => {
   const form = new FormData();
   form.append('file', file[0]);
-  return axios
-    .post(uploadURL, form, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-    .then((response) => response.data);
+  const response = await axios.post(uploadURL, form, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return response.data;
 };
+
+interface ICreatePhotoVariables {
+  roomPk: string;
+  description: string;
+  file: string;
+}
+
+export const createPhoto = ({
+  roomPk,
+  description,
+  file,
+}: ICreatePhotoVariables) =>
+  axiosInstance
+    .post(
+      `rooms/${roomPk}/photos/`,
+      { description, file },
+      {
+        headers: {
+          'X-CSRFToken': Cookie.get('csrftoken') || '',
+        },
+      }
+    )
+    .then((response) => response.data);
