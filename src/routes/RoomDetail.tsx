@@ -18,7 +18,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { dateFormat } from 'lib/util';
 
 function RoomDetail() {
   const { roomPk } = useParams();
@@ -32,9 +33,14 @@ function RoomDetail() {
     IReview[]
   >(['rooms', roomPk, 'reviews'], getRoomreviews);
 
-  const [dates, setDates] = useState<Date>();
+  const [dates, setDates] = useState<Date[]>();
 
-  console.log(dates);
+  useEffect(() => {
+    if (!dates) return;
+    const [checkIn, checkOut] = dates;
+
+    console.log(dateFormat(checkIn), dateFormat(checkOut));
+  }, [dates]);
 
   return (
     <Box
