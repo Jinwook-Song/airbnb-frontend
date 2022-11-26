@@ -1,6 +1,8 @@
+import 'styles/calendar.css';
 import { useParams } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { Helmet } from 'react-helmet';
 import { useQuery } from '@tanstack/react-query';
 import { checkBooking, getRoom, getRoomreviews } from 'lib/api';
 import { IReview, IRoomDetail } from 'types';
@@ -51,6 +53,9 @@ function RoomDetail() {
         lg: 40,
       }}
     >
+      <Helmet>
+        <title>{data ? data.name : 'loading...'}</title>
+      </Helmet>
       <Skeleton isLoaded={!isLoading} height={'44px'} width={'50%'}>
         <Heading>{data?.name}</Heading>
       </Skeleton>
