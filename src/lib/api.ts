@@ -3,6 +3,7 @@ import axios from 'axios';
 import { QueryFunctionContext } from '@tanstack/react-query';
 import { LoginFormProps } from 'components/modal/LoginModal';
 import { UploadRoomFormProps } from 'routes/UploadRoom';
+import { dateFormat } from './util';
 
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/v1/',
@@ -151,3 +152,19 @@ export const createPhoto = ({
       }
     )
     .then((response) => response.data);
+
+export const checkBooking = ({
+  queryKey,
+}: QueryFunctionContext): Promise<{ ok: boolean }> => {
+  const [_, roomPk, dates] = queryKey;
+  // if (!dates) return;
+  const [checkIn, checkOut] = dates as Date[];
+
+  return axiosInstance
+    .get(
+      `rooms/${roomPk}/bookings/check?check_in=${dateFormat(
+        checkIn
+      )}&check_out=${dateFormat(checkOut)}`
+    )
+    .then((response) => response.data);
+};

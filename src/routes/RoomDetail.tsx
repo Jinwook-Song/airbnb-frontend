@@ -2,12 +2,13 @@ import { useParams } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useQuery } from '@tanstack/react-query';
-import { getRoom, getRoomreviews } from 'lib/api';
+import { checkBooking, getRoom, getRoomreviews } from 'lib/api';
 import { IReview, IRoomDetail } from 'types';
 import {
   Avatar,
   AvatarBadge,
   Box,
+  Button,
   Grid,
   GridItem,
   Heading,
@@ -18,8 +19,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
-import { dateFormat } from 'lib/util';
+import { useState } from 'react';
 
 function RoomDetail() {
   const { roomPk } = useParams();
@@ -34,13 +34,14 @@ function RoomDetail() {
   >(['rooms', roomPk, 'reviews'], getRoomreviews);
 
   const [dates, setDates] = useState<Date[]>();
-
-  useEffect(() => {
-    if (!dates) return;
-    const [checkIn, checkOut] = dates;
-
-    console.log(dateFormat(checkIn), dateFormat(checkOut));
-  }, [dates]);
+  const { data: checkBookingData, isLoading: checkBookingLoading } = useQuery(
+    ['check', roomPk, dates],
+    checkBooking,
+    {
+      cacheTime: 0, // 가장 최신의 결과르 받기위해
+      enabled: dates !== undefined, // dates 없는 경우 query 실행 방지
+    }
+  );
 
   return (
     <Box
@@ -166,7 +167,7 @@ function RoomDetail() {
                 ))}
               </Grid>
             </Skeleton>
-            <Box>
+            <VStack spacing={2}>
               <Calendar
                 onChange={setDates}
                 locale='en-US'
@@ -177,7 +178,15 @@ function RoomDetail() {
                 next2Label={null}
                 selectRange
               />
-            </Box>
+              <Button
+                isLoading={dates && checkBookingLoading}
+                disabled={!checkBookingData?.ok}
+                w='full'
+                colorScheme={'red'}
+              >
+                Make a reservation
+              </Button>
+            </VStack>
           </Grid>
         </HStack>
       </Box>

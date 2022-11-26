@@ -1127,3 +1127,15 @@ const [dates, setDates] = useState<Date>();
   selectRange
 />;
 ```
+
+```tsx
+const [dates, setDates] = useState<Date[]>();
+const { data: checkBookingData, isLoading: checkBookingLoading } = useQuery(
+  ['check', roomPk, dates],
+  checkBooking,
+  {
+    cacheTime: 0, // 가장 최신의 결과르 받기위해
+    enabled: dates !== undefined, // dates 없는 경우 query 실행 방지
+  }
+);
+```
