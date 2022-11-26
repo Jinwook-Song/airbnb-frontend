@@ -1101,3 +1101,29 @@ Front request URL to backend
 Bakcend give empty URL from CF
 
 Front directly upload image on the URL
+
+## Calendar
+
+`npm i react-calendar`
+
+props가 직관적이라 그대로 이해할 수 있음
+
+[docs](https://www.npmjs.com/package/react-calendar)
+
+```tsx
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css'; // default css
+
+const [dates, setDates] = useState<Date>();
+
+<Calendar
+  onChange={setDates}
+  locale='en-US'
+  minDate={new Date()}
+  maxDate={new Date(Date.now() + 60 * 60 * 24 * 60 * 1000)}
+  minDetail='month'
+  prev2Label={null}
+  next2Label={null}
+  selectRange
+/>;
+```

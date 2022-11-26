@@ -1,4 +1,6 @@
 import { useParams } from 'react-router-dom';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 import { useQuery } from '@tanstack/react-query';
 import { getRoom, getRoomreviews } from 'lib/api';
 import { IReview, IRoomDetail } from 'types';
@@ -16,6 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
+import { useState } from 'react';
 
 function RoomDetail() {
   const { roomPk } = useParams();
@@ -29,7 +32,9 @@ function RoomDetail() {
     IReview[]
   >(['rooms', roomPk, 'reviews'], getRoomreviews);
 
-  console.log(data, reviewsData);
+  const [dates, setDates] = useState<Date>();
+
+  console.log(dates);
 
   return (
     <Box
@@ -115,29 +120,60 @@ function RoomDetail() {
             </HStack>
           </Heading>
         </Skeleton>
-        <Skeleton w='full' isLoaded={!isReviewsLoading}>
-          <Grid w='100%' templateColumns={'1fr 1fr'} gap='10'>
-            {reviewsData?.map((review, idx) => (
-              <VStack alignItems={'flex-start'} key={idx}>
-                <HStack>
-                  <Avatar
-                    name={review.user.username}
-                    src={review.user.avatar}
-                    size='md'
-                  />
-                  <VStack spacing={0} alignItems={'flex-start'}>
-                    <Heading fontSize={'md'}>{review.user.username}</Heading>
-                    <HStack spacing={1}>
-                      <FaStar size={'12px'} />
-                      <Text>{review.rating}</Text>
+        <HStack>
+          <Grid
+            gap={8}
+            templateColumns={{
+              base: 'repeat(1, 1fr)',
+              md: '2fr 1fr',
+            }}
+          >
+            <Skeleton isLoaded={!isReviewsLoading}>
+              <Grid
+                w='100%'
+                templateColumns={{
+                  base: 'repeat(1, 1fr)',
+                  md: 'repeat(2, 1fr)',
+                }}
+                gap='10'
+              >
+                {reviewsData?.map((review, idx) => (
+                  <VStack alignItems={'flex-start'} key={idx}>
+                    <HStack>
+                      <Avatar
+                        name={review.user.username}
+                        src={review.user.avatar}
+                        size='md'
+                      />
+                      <VStack spacing={0} alignItems={'flex-start'}>
+                        <Heading fontSize={'md'}>
+                          {review.user.username}
+                        </Heading>
+                        <HStack spacing={1}>
+                          <FaStar size={'12px'} />
+                          <Text>{review.rating}</Text>
+                        </HStack>
+                      </VStack>
                     </HStack>
+                    <Text>{review.payload}</Text>
                   </VStack>
-                </HStack>
-                <Text>{review.payload}</Text>
-              </VStack>
-            ))}
+                ))}
+              </Grid>
+            </Skeleton>
+            <Box>
+              <Calendar
+                onChange={setDates}
+                locale='en-US'
+                minDate={new Date()}
+                maxDate={new Date(Date.now() + 60 * 60 * 24 * 60 * 1000)}
+                minDetail='month'
+                prev2Label={null}
+                next2Label={null}
+                selectRange
+              />
+            </Box>
           </Grid>
-        </Skeleton>
+        </HStack>
       </Box>
     </Box>
   );
