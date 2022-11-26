@@ -6,7 +6,10 @@ import { UploadRoomFormProps } from 'routes/UploadRoom';
 import { dateFormat } from './util';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/v1/',
+  baseURL:
+    process.env.NODE_ENV === 'production'
+      ? 'https://airbnb-lir6.onrender.com/api/v1/'
+      : 'http://127.0.0.1:8000/api/v1/',
   withCredentials: true, // API 요청시 쿠키를 보냄
 });
 
@@ -153,18 +156,21 @@ export const createPhoto = ({
     )
     .then((response) => response.data);
 
-export const checkBooking = ({
+export const checkBooking = async ({
   queryKey,
 }: QueryFunctionContext): Promise<{ ok: boolean }> => {
+  // eslint-disable-next-line
   const [_, roomPk, dates] = queryKey;
   // if (!dates) return;
   const [checkIn, checkOut] = dates as Date[];
 
-  return axiosInstance
-    .get(
-      `rooms/${roomPk}/bookings/check?check_in=${dateFormat(
-        checkIn
-      )}&check_out=${dateFormat(checkOut)}`
-    )
-    .then((response) => response.data);
+  const response = await axiosInstance.get(
+    `rooms/${roomPk}/bookings/check?check_in=${dateFormat(
+      checkIn
+    )}&check_out=${dateFormat(checkOut)}`
+  );
+  return response.data;
 };
+
+// TODO:
+export const bookingRoom = () => {};
