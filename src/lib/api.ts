@@ -8,7 +8,7 @@ import { dateFormat } from './util';
 const axiosInstance = axios.create({
   baseURL:
     process.env.NODE_ENV === 'production'
-      ? 'https://airbnb-lir6.onrender.com/api/v1/'
+      ? 'https://backend.airbnbv1.xyz/api/v1/'
       : 'http://127.0.0.1:8000/api/v1/',
   withCredentials: true, // API 요청시 쿠키를 보냄
 });
