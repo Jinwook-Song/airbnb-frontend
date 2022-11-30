@@ -33,7 +33,7 @@ function Home() {
               pk={room.pk}
               imageUrl={
                 room.photos[0]?.file ??
-                `https://source.unsplash.com/random/800x${800 + idx}`
+                `https://imagedelivery.net/0yNBnB1j4b45loBWzdicYQ/7bf5c5d4-e341-4d31-559a-b6b4d9686f00/public`
               }
               name={room.name}
               rating={room.rating}

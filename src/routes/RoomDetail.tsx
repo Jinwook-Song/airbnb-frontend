@@ -80,7 +80,7 @@ function RoomDetail() {
                 <Image
                   src={
                     data?.photos[idx]?.file ??
-                    `https://source.unsplash.com/random/400x${400 + idx}`
+                    `https://imagedelivery.net/0yNBnB1j4b45loBWzdicYQ/7bf5c5d4-e341-4d31-559a-b6b4d9686f00/public`
                   }
                   w='100%'
                   h='100%'
